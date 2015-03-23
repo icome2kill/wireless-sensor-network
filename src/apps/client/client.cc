@@ -297,6 +297,8 @@ void Client::sendData(char* message, int type) {
     /* End to end statistics */
     (check_and_cast<Statistic*>(simulation.getModuleByPath("statistic"))->registerStatistic(
     type));
+    (check_and_cast<Statistic*>(simulation.getModuleByPath("statistic"))->registerStatistic(
+    APP_SEND));
 
     if (DEBUG) {
         std::cout << "Sending data " << message << endl;
