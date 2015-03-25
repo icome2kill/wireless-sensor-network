@@ -16,7 +16,7 @@
 //#define MAX 1
 
 #ifndef DEBUG
-#define DEBUG 1
+#define DEBUG 0
 #endif
 
 namespace wsn_energy {
