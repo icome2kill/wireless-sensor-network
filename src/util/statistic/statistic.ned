@@ -87,12 +87,12 @@ simple Statistic
         @statistic[appSendLight](title="Number of light data send: "; record=last);
         @statistic[appRecvLight](title="Number of light data recv: "; record=last);
         @statistic[appRecvLightDelay](title="Total delay (in second) of received light data: "; record=last);
-        @signal[appSendHeat](type="int");
-        @signal[appRecvHeat](type="int");
-        @signal[appRecvHeatDelay](type="double");
-        @statistic[appSendHeat](title="Number of heat data send: "; record=last);
-        @statistic[appRecvHeat](title="Number of heat data recv: "; record=last);
-        @statistic[appRecvHeatDelay](title="Total delay (in second) of received heat data: "; record=last);
+        @signal[appSendTemperature](type="int");
+        @signal[appRecvTemperature](type="int");
+        @signal[appRecvTemperatureDelay](type="double");
+        @statistic[appSendTemperature](title="Number of temperature data send: "; record=last);
+        @statistic[appRecvTemperature](title="Number of temperature data recv: "; record=last);
+        @statistic[appRecvTemperatureDelay](title="Total delay (in second) of received temperature data: "; record=last);
         @signal[appSendMoisture](type="int");
         @signal[appRecvMoisture](type="int");
         @signal[appRecvMoistureDelay](type="double");

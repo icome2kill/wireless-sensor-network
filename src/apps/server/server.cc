@@ -37,7 +37,7 @@ void Server::initialize() {
         std::cout << endl;
     }
 
-    // create new session file
+    // create new session myfile
     std::ofstream myfile;
     myfile.open("data.txt");
     myfile << "[Data received from client]";
@@ -52,14 +52,32 @@ void Server::processUpperLayerMessage(cPacket* packet) {
     return;
 }
 
+std::vector<std::string> &split(const std::string &s, char delim,
+        std::vector<std::string> &elems) {
+    std::stringstream ss(s);
+    std::string item;
+    while (std::getline(ss, item, delim)) {
+        elems.push_back(item);
+    }
+    return elems;
+}
+
+std::vector<std::string> split(const std::string &s, char delim) {
+    std::vector<std::string> elems;
+    split(s, delim, elems);
+    return elems;
+}
+
 void Server::processLowerLayerMessage(cPacket* packet) {
     Data* data = check_and_cast<Data*>(packet);
 
-    // Write value to file
+    // Write value to myfile
     std::ofstream myfile;
     myfile.open("data.txt", std::ios::app);
     myfile << "\n" << data->getValue();
     myfile.close();
+
+    char myfilename[100] = { 0 };
 
     if (DEBUG)
         this->getParentModule()->bubble(data->getValue());
@@ -73,26 +91,47 @@ void Server::processLowerLayerMessage(cPacket* packet) {
 
         char value = data->getValue()[0];
         if (value > '0' && value < '5') {
+            std::vector<std::string> tokens = split(data->getValue(), ' ');
+            std::string id = tokens.at(1);
             int dataType = APP_RECV;
             int dataTypeDelay = DELAY_APP_LAYER;
+
             if (value == '1') {
-                // Heat data
+                // Temperature data
+                myfilename[0] = '\0';
+                sprintf(myfilename, "server_data/id_%s_data_light.txt",
+                        id.c_str());
+                myfile.open(myfilename, std::ios::app);
                 dataType = APP_RECV_LIGHT;
                 dataTypeDelay = APP_RECV_LIGHT_DELAY;
             } else if (value == '2') {
-                dataType = APP_RECV_HEAT;
-                dataTypeDelay = APP_RECV_HEAT_DELAY;
+                myfilename[0] = '\0';
+                sprintf(myfilename, "server_data/id_%s_data_temperature.txt",
+                        id.c_str());
+                myfile.open(myfilename, std::ios::app);
+                dataType = APP_RECV_TEMPERATURE;
+                dataTypeDelay = APP_RECV_TEMPERATURE_DELAY;
             } else if (value == '3') {
+                myfilename[0] = '\0';
+                sprintf(myfilename, "server_data/id_%s_data_moisture.txt",
+                        id.c_str());
+                myfile.open(myfilename, std::ios::app);
                 dataType = APP_RECV_MOISTURE;
                 dataTypeDelay = APP_RECV_MOISTURE_DELAY;
             } else if (value == '4') {
+                myfilename[0] = '\0';
+                sprintf(myfilename, "server_data/id_%s_data_soil.txt",
+                        id.c_str());
+                myfile.open(myfilename, std::ios::app);
                 dataType = APP_RECV_SOIL;
                 dataTypeDelay = APP_RECV_SOIL_DELAY;
             }
+            myfile << simTime().inUnit(SIMTIME_MS) << " " << tokens.at(2) << "\n";
+            myfile.close();
             ((Statistic*) simulation.getModuleByPath("statistic"))->registerStatistic(
-            dataType);
+                    dataType);
             ((Statistic*) simulation.getModuleByPath("statistic"))->registerStatisticDelay(
-            dataTypeDelay, simTime().dbl() - data->getTime());
+                    dataTypeDelay, simTime().dbl() - data->getTime());
         }
     }
 

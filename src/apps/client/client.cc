@@ -6,6 +6,7 @@
  *  functioning: refer to client.h
  */
 
+#include <fstream>
 #include "client.h"
 #include "radio.h"
 #include "statistic.h"
@@ -26,6 +27,7 @@ Define_Module(Client);
 void Client::initialize() {
     // set global address
     // simulate the pseudo-assigned MAC and IPv6 address creation
+//    this->msgQueue = new std::queue();
 
     // create MAC
     this->macAddress = new MacAddress(getId());
@@ -43,7 +45,8 @@ void Client::initialize() {
     if (DEBUG) {
         std::cout << this->getFullPath() << " has mac address ";
         this->macAddress->print();
-        std::cout << this->getFullPath() << " has tentative link-local address ";
+        std::cout << this->getFullPath()
+                << " has tentative link-local address ";
         this->ipAddress->print();
         std::cout << endl;
     }
@@ -103,6 +106,35 @@ void Client::initialize() {
             ev << "Just construct " << endl;
         break;
     }
+
+    if (getParentModule() != NULL) {
+        std::ofstream myfile;
+        char myfilename[100];
+
+        sprintf(myfilename, "client_data/id_%s_data_light.txt",
+                getParentModule()->getFullName());
+        myfile.open(myfilename);
+        myfile << "light" << "\n";
+        myfile.close();
+
+        sprintf(myfilename, "client_data/id_%s_data_temperature.txt",
+                getParentModule()->getFullName());
+        myfile.open(myfilename);
+        myfile << "temperature (C)" << "\n";
+        myfile.close();
+
+        sprintf(myfilename, "client_data/id_%s_data_moisture.txt",
+                getParentModule()->getFullName());
+        myfile.open(myfilename);
+        myfile << "moisture (%)" << "\n";
+        myfile.close();
+
+        sprintf(myfilename, "client_data/id_%s_data_soil.txt",
+                getParentModule()->getFullName());
+        myfile.open(myfilename);
+        myfile << "PH, moisture" << "\n";
+        myfile.close();
+    }
 }
 
 void Client::initSensors(bool isHighFreq) {
@@ -120,8 +152,9 @@ void Client::initSensors(bool isHighFreq) {
     if (isHighFreq) {
         selfTimer(
                 setupDelay
-                        + getModuleByPath("^.^")->par("heatSensingDelayHigh").doubleValue(),
-                APP_SEND_HEAT_DATA_HIGH);
+                        + getModuleByPath("^.^")->par(
+                                "temperatureSensingDelayHigh").doubleValue(),
+                APP_SEND_TEMPERATURE_DATA_HIGH);
         selfTimer(
                 setupDelay
                         + getModuleByPath("^.^")->par("soilSensingDelayHigh").doubleValue(),
@@ -129,8 +162,9 @@ void Client::initSensors(bool isHighFreq) {
     } else {
         selfTimer(
                 setupDelay
-                        + getModuleByPath("^.^")->par("heatSensingDelayLow").doubleValue(),
-                APP_SEND_HEAT_DATA_LOW);
+                        + getModuleByPath("^.^")->par(
+                                "temperatureSensingDelayLow").doubleValue(),
+                APP_SEND_TEMPERATURE_DATA_LOW);
         selfTimer(
                 setupDelay
                         + getModuleByPath("^.^")->par("soilSensingDelayLow").doubleValue(),
@@ -178,18 +212,18 @@ void Client::processSelfMessage(cPacket* packet) {
                     APP_SEND_LIGHT_DATA);
             break;
         }
-        case APP_SEND_HEAT_DATA_HIGH: {
-            sendData("2 Heat data", APP_SEND_HEAT);
+        case APP_SEND_TEMPERATURE_DATA_HIGH: {
+            sendData("2 Temperature data", APP_SEND_TEMPERATURE);
             selfTimer(
-                    getModuleByPath("^.^")->par("heatSensingDelayHigh").doubleValue(),
-                    APP_SEND_HEAT_DATA_HIGH);
+                    getModuleByPath("^.^")->par("temperatureSensingDelayHigh").doubleValue(),
+                    APP_SEND_TEMPERATURE_DATA_HIGH);
             break;
         }
-        case APP_SEND_HEAT_DATA_LOW: {
-            sendData("2 Heat data", APP_SEND_HEAT);
+        case APP_SEND_TEMPERATURE_DATA_LOW: {
+            sendData("2 Temperature data", APP_SEND_TEMPERATURE);
             selfTimer(
-                    getModuleByPath("^.^")->par("heatSensingDelayLow").doubleValue(),
-                    APP_SEND_HEAT_DATA_LOW);
+                    getModuleByPath("^.^")->par("temperatureSensingDelayLow").doubleValue(),
+                    APP_SEND_TEMPERATURE_DATA_LOW);
             break;
         }
         case APP_SEND_MOISTURE_DATA: {
@@ -284,26 +318,88 @@ void Client::sendData() {
 }
 
 void Client::sendData(char* message, int type) {
-    char buf[30];
-    int len = sprintf(buf, message);
+    char buf[100] = { 0 };
+    char data[100] = { 0 };
+    char myfilename[100] = { 0 };
+    int len = 0;
 
     // hack port, address
     int destinationPort = UDP_SERVER_PORT;
-    int destinationAddress =
-    simulation.getModuleByPath("server.net")->getId();
+    int destinationAddress = simulation.getModuleByPath("server.net")->getId();
 
+    if (type != APP_SEND) {
+        std::ofstream myfile;
+        switch (type) {
+        case APP_SEND_LIGHT:
+            buf[0] = '\0';
+            data[0] = '\0';
+            myfilename[0] = '\0';
+
+            sprintf(data, "%d", rand() % 200 + 4300);
+            sprintf(myfilename, "client_data/id_%s_data_light.txt",
+                    getParentModule()->getFullName());
+
+            len = sprintf(buf, "1 %s %s", getParentModule()->getFullName(),
+                    data);
+            myfile.open(myfilename, std::ios::app);
+            break;
+        case APP_SEND_TEMPERATURE:
+            buf[0] = '\0';
+            data[0] = '\0';
+            myfilename[0] = '\0';
+            sprintf(data, "%d", rand() % 200 + 1900);
+            len = sprintf(buf, "2 %s %s", getParentModule()->getFullName(),
+                    data);
+            sprintf(myfilename, "client_data/id_%s_data_temperature.txt",
+                    getParentModule()->getFullName());
+            myfile.open(myfilename, std::ios::app);
+            break;
+        case APP_SEND_MOISTURE:
+            buf[0] = '\0';
+            data[0] = '\0';
+            myfilename[0] = '\0';
+            sprintf(data, "%d", rand() % 200 + 3700);
+            len = sprintf(buf, "3 %s %s", getParentModule()->getFullName(),
+                    data);
+            sprintf(myfilename, "client_data/id_%s_data_moisture.txt",
+                    getParentModule()->getFullName());
+            myfile.open(myfilename, std::ios::app);
+            break;
+        case APP_SEND_SOIL:
+            buf[0] = '\0';
+            data[0] = '\0';
+            myfilename[0] = '\0';
+            sprintf(data, "%d, %d", rand() % 20 + 60, rand() % 200 + 5000);
+            len = sprintf(buf, "4 %s %s", getParentModule()->getFullName(),
+                    data);
+            sprintf(myfilename, "client_data/id_%s_data_soil.txt",
+                    getParentModule()->getFullName());
+            myfile.open(myfilename, std::ios::app);
+            break;
+        }
+
+        myfile << simTime().inUnit(SIMTIME_MS);
+        myfile << ", ";
+        myfile << data;
+        myfile << "\n";
+        myfile.close();
+    } else {
+        buf[0] = '\0';
+        len = sprintf(buf, message);
+    }
+//    len = sprintf(buf, message);
     sendMessage(buf, len, destinationPort, destinationAddress);
+    if (DEBUG) {
+        std::cout << "Sending data " << buf << endl;
+        this->bubble(message);
+    }
 
     /* End to end statistics */
     (check_and_cast<Statistic*>(simulation.getModuleByPath("statistic"))->registerStatistic(
-    type));
+            type));
     (check_and_cast<Statistic*>(simulation.getModuleByPath("statistic"))->registerStatistic(
     APP_SEND));
 
-    if (DEBUG) {
-        std::cout << "Sending data " << message << endl;
-        this->bubble(message);
-    }
 }
 
 void Client::sendData(char* message) {

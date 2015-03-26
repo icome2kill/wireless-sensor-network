@@ -54,8 +54,8 @@ network WSN
         int ssRange @unit(m);
         
         int lightSensingDelay;
-        int heatSensingDelayHigh;
-        int heatSensingDelayLow;
+        int temperatureSensingDelayHigh;
+        int temperatureSensingDelayLow;
         int moistureSensingDelay;
         int soilSensingDelayHigh;
         int soilSensingDelayLow;

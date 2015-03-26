@@ -26,6 +26,7 @@ class Client : public myModule
   private:
     int packetNumber;
     IpAddress* serverAddress;
+//    std::queue<string> msgQueue;
 
     void sendData();
     void newData();

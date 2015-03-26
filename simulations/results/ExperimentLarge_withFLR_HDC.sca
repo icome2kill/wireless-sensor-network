@@ -27,12 +27,12 @@ scalar WSN.statistic 	appRecvMoisture:last 	15614
 attr title  "Number of moisture data recv: , last"
 scalar WSN.statistic 	appSendMoisture:last 	24696
 attr title  "Number of moisture data send: , last"
-scalar WSN.statistic 	appRecvHeatDelay:last 	2441.8243063733
-attr title  "Total delay (in second) of received heat data: , last"
-scalar WSN.statistic 	appRecvHeat:last 	7018
-attr title  "Number of heat data recv: , last"
-scalar WSN.statistic 	appSendHeat:last 	12312
-attr title  "Number of heat data send: , last"
+scalar WSN.statistic 	appRecvTemperatureDelay:last 	2441.8243063733
+attr title  "Total delay (in second) of received temperature data: , last"
+scalar WSN.statistic 	appRecvTemperature:last 	7018
+attr title  "Number of temperature data recv: , last"
+scalar WSN.statistic 	appSendTemperature:last 	12312
+attr title  "Number of temperature data send: , last"
 scalar WSN.statistic 	appRecvLightDelay:last 	854.65402785965
 attr title  "Total delay (in second) of received light data: , last"
 scalar WSN.statistic 	appRecvLight:last 	2504

@@ -48,17 +48,17 @@ void Statistic::initialize() {
     numIPtrans = 0;
 
     numAppSendLight = 0;
-    numAppSendHeat = 0;
+    numAppSendTemperature = 0;
     numAppSendMoisture = 0;
     numAppSendSoil = 0;
 
     numAppRecvLight = 0;
-    numAppRecvHeat = 0;
+    numAppRecvTemperature = 0;
     numAppRecvMoisture = 0;
     numAppRecvSoil = 0;
 
     numDelayAppRecvLight = 0;
-    numDelayAppRecvHeat = 0;
+    numDelayAppRecvTemperature = 0;
     numDelayAppRecvMoisture = 0;
     numDelayAppRecvSoil = 0;
 
@@ -94,17 +94,17 @@ void Statistic::initialize() {
     sigLifeTimeFirst = registerSignal("lifeTimeFirst");
 
     sigNumAppSendLight = registerSignal("appSendLight");
-    sigNumAppSendHeat = registerSignal("appSendHeat");
+    sigNumAppSendTemperature = registerSignal("appSendTemperature");
     sigNumAppSendMoisture = registerSignal("appSendMoisture");
     sigNumAppSendSoil = registerSignal("appSendSoil");
 
     sigNumAppRecvLight = registerSignal("appRecvLight");
-    sigNumAppRecvHeat = registerSignal("appRecvHeat");
+    sigNumAppRecvTemperature = registerSignal("appRecvTemperature");
     sigNumAppRecvMoisture = registerSignal("appRecvMoisture");
     sigNumAppRecvSoil = registerSignal("appRecvSoil");
 
     sigNumDelayAppRecvLight = registerSignal("appRecvLightDelay");
-    sigNumDelayAppRecvHeat = registerSignal("appRecvHeatDelay");
+    sigNumDelayAppRecvTemperature = registerSignal("appRecvTemperatureDelay");
     sigNumDelayAppRecvMoisture = registerSignal("appRecvMoistureDelay");
     sigNumDelayAppRecvSoil = registerSignal("appRecvSoilDelay");
 
@@ -307,8 +307,8 @@ void Statistic::registerStatistic(int type) {
         case APP_SEND_LIGHT:
             emit(sigNumAppSendLight, ++numAppSendLight);
             break;
-        case APP_SEND_HEAT:
-            emit(sigNumAppSendHeat, ++numAppSendHeat);
+        case APP_SEND_TEMPERATURE:
+            emit(sigNumAppSendTemperature, ++numAppSendTemperature);
             break;
         case APP_SEND_MOISTURE:
             emit(sigNumAppSendMoisture, ++numAppSendMoisture);
@@ -319,8 +319,8 @@ void Statistic::registerStatistic(int type) {
         case APP_RECV_LIGHT:
             emit(sigNumAppRecvLight, ++numAppRecvLight);
             break;
-        case APP_RECV_HEAT:
-            emit(sigNumAppRecvHeat, ++numAppRecvHeat);
+        case APP_RECV_TEMPERATURE:
+            emit(sigNumAppRecvTemperature, ++numAppRecvTemperature);
             break;
         case APP_RECV_MOISTURE:
             emit(sigNumAppRecvMoisture, ++numAppRecvMoisture);
@@ -369,9 +369,9 @@ void Statistic::registerStatisticDelay(int type, double delayTime) {
             numDelayAppRecvLight += delayTime;
             emit(sigNumDelayAppRecvLight, numDelayAppRecvLight);
             break;
-        case APP_RECV_HEAT_DELAY:
-            numDelayAppRecvHeat += delayTime;
-            emit(sigNumDelayAppRecvHeat, numDelayAppRecvHeat);
+        case APP_RECV_TEMPERATURE_DELAY:
+            numDelayAppRecvTemperature += delayTime;
+            emit(sigNumDelayAppRecvTemperature, numDelayAppRecvTemperature);
             break;
         case APP_RECV_MOISTURE_DELAY:
             numDelayAppRecvMoisture += delayTime;

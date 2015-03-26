@@ -31,9 +31,9 @@
 #define LIFE_TIME_FIRST_DEAD_NODE           15
 #define DELAY_APP_LAYER 16
 #define DELAY_NET_LAYER 17
-#define APP_SEND_HEAT 18
-#define APP_RECV_HEAT 19
-#define APP_RECV_HEAT_DELAY 20
+#define APP_SEND_TEMPERATURE 18
+#define APP_RECV_TEMPERATURE 19
+#define APP_RECV_TEMPERATURE_DELAY 20
 #define APP_SEND_LIGHT 21
 #define APP_RECV_LIGHT 22
 #define APP_RECV_LIGHT_DELAY 23
@@ -136,29 +136,29 @@ class Statistic : public cSimpleModule
     bool isLimit;
 
     int numAppSendLight;
-    int numAppSendHeat;
+    int numAppSendTemperature;
     int numAppSendMoisture;
     int numAppSendSoil;
     simsignal_t sigNumAppSendLight;
-    simsignal_t sigNumAppSendHeat;
+    simsignal_t sigNumAppSendTemperature;
     simsignal_t sigNumAppSendMoisture;
     simsignal_t sigNumAppSendSoil;
 
     int numAppRecvLight;
-    int numAppRecvHeat;
+    int numAppRecvTemperature;
     int numAppRecvMoisture;
     int numAppRecvSoil;
     simsignal_t sigNumAppRecvLight;
-    simsignal_t sigNumAppRecvHeat;
+    simsignal_t sigNumAppRecvTemperature;
     simsignal_t sigNumAppRecvMoisture;
     simsignal_t sigNumAppRecvSoil;
 
     double numDelayAppRecvLight;
-    double numDelayAppRecvHeat;
+    double numDelayAppRecvTemperature;
     double numDelayAppRecvMoisture;
     double numDelayAppRecvSoil;
     simsignal_t sigNumDelayAppRecvLight;
-    simsignal_t sigNumDelayAppRecvHeat;
+    simsignal_t sigNumDelayAppRecvTemperature;
     simsignal_t sigNumDelayAppRecvMoisture;
     simsignal_t sigNumDelayAppRecvSoil;
 
