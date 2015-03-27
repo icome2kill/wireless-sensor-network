@@ -89,49 +89,54 @@ void Server::processLowerLayerMessage(cPacket* packet) {
         ((Statistic*) simulation.getModuleByPath("statistic"))->registerStatisticDelay(
         DELAY_APP_LAYER, simTime().dbl() - data->getTime());
 
-        char value = data->getValue()[0];
-        if (value > '0' && value < '5') {
-            std::vector<std::string> tokens = split(data->getValue(), ' ');
-            std::string id = tokens.at(1);
-            int dataType = APP_RECV;
-            int dataTypeDelay = DELAY_APP_LAYER;
+        std::vector<std::string> tokens = split(data->getValue(), '|');
+        std::string id = tokens.at(0);
+        for (unsigned int i = 1; i < tokens.size(); i++) {
+            std::vector<std::string> tokens2 = split(tokens.at(i), '/');
+            char value = tokens.at(i).at(0);
+            if (value > '0' && value < '5') {
+                int dataType = APP_RECV;
+                int dataTypeDelay = DELAY_APP_LAYER;
 
-            if (value == '1') {
-                // Temperature data
-                myfilename[0] = '\0';
-                sprintf(myfilename, "server_data/id_%s_data_light.txt",
-                        id.c_str());
-                myfile.open(myfilename, std::ios::app);
-                dataType = APP_RECV_LIGHT;
-                dataTypeDelay = APP_RECV_LIGHT_DELAY;
-            } else if (value == '2') {
-                myfilename[0] = '\0';
-                sprintf(myfilename, "server_data/id_%s_data_temperature.txt",
-                        id.c_str());
-                myfile.open(myfilename, std::ios::app);
-                dataType = APP_RECV_TEMPERATURE;
-                dataTypeDelay = APP_RECV_TEMPERATURE_DELAY;
-            } else if (value == '3') {
-                myfilename[0] = '\0';
-                sprintf(myfilename, "server_data/id_%s_data_moisture.txt",
-                        id.c_str());
-                myfile.open(myfilename, std::ios::app);
-                dataType = APP_RECV_MOISTURE;
-                dataTypeDelay = APP_RECV_MOISTURE_DELAY;
-            } else if (value == '4') {
-                myfilename[0] = '\0';
-                sprintf(myfilename, "server_data/id_%s_data_soil.txt",
-                        id.c_str());
-                myfile.open(myfilename, std::ios::app);
-                dataType = APP_RECV_SOIL;
-                dataTypeDelay = APP_RECV_SOIL_DELAY;
+                if (value == '1') {
+                    // Temperature data
+                    myfilename[0] = '\0';
+                    sprintf(myfilename, "server_data/id_%s_data_light.txt",
+                            id.c_str());
+                    myfile.open(myfilename, std::ios::app);
+                    dataType = APP_RECV_LIGHT;
+                    dataTypeDelay = APP_RECV_LIGHT_DELAY;
+                } else if (value == '2') {
+                    myfilename[0] = '\0';
+                    sprintf(myfilename,
+                            "server_data/id_%s_data_temperature.txt",
+                            id.c_str());
+                    myfile.open(myfilename, std::ios::app);
+                    dataType = APP_RECV_TEMPERATURE;
+                    dataTypeDelay = APP_RECV_TEMPERATURE_DELAY;
+                } else if (value == '3') {
+                    myfilename[0] = '\0';
+                    sprintf(myfilename, "server_data/id_%s_data_moisture.txt",
+                            id.c_str());
+                    myfile.open(myfilename, std::ios::app);
+                    dataType = APP_RECV_MOISTURE;
+                    dataTypeDelay = APP_RECV_MOISTURE_DELAY;
+                } else if (value == '4') {
+                    myfilename[0] = '\0';
+                    sprintf(myfilename, "server_data/id_%s_data_soil.txt",
+                            id.c_str());
+                    myfile.open(myfilename, std::ios::app);
+                    dataType = APP_RECV_SOIL;
+                    dataTypeDelay = APP_RECV_SOIL_DELAY;
+                }
+                myfile << simTime().inUnit(SIMTIME_MS) << " " << tokens2.at(1)
+                        << "\n";
+                myfile.close();
+                ((Statistic*) simulation.getModuleByPath("statistic"))->registerStatistic(
+                        dataType);
+                ((Statistic*) simulation.getModuleByPath("statistic"))->registerStatisticDelay(
+                        dataTypeDelay, simTime().dbl() - data->getTime());
             }
-            myfile << simTime().inUnit(SIMTIME_MS) << " " << tokens.at(2) << "\n";
-            myfile.close();
-            ((Statistic*) simulation.getModuleByPath("statistic"))->registerStatistic(
-                    dataType);
-            ((Statistic*) simulation.getModuleByPath("statistic"))->registerStatisticDelay(
-                    dataTypeDelay, simTime().dbl() - data->getTime());
         }
     }
 

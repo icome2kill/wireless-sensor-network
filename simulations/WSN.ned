@@ -53,6 +53,8 @@ network WSN
 
         int ssRange @unit(m);
         
+        bool usingMsgQueue;
+        
         int lightSensingDelay;
         int temperatureSensingDelayHigh;
         int temperatureSensingDelayLow;

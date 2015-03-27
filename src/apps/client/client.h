@@ -12,12 +12,15 @@
 #include <myModule.h>
 #include <macAddress.h>
 #include <ipAddress.h>
+#include <string>
 
 #ifndef UDP_PORT
 #define UDP_PORT
 #define UDP_SERVER_PORT 5678 // UDP port
 #define UDP_CLIENT_PORT 8765 // UDP port
 #endif
+
+using namespace std;
 
 namespace wsn_energy {
 
@@ -26,6 +29,7 @@ class Client : public myModule
   private:
     int packetNumber;
     IpAddress* serverAddress;
+    std::vector<std::string> dataQueue;
 //    std::queue<string> msgQueue;
 
     void sendData();
@@ -33,6 +37,7 @@ class Client : public myModule
     void initSensors(bool);
     void sendData(char *);
     void sendData(char *, int);
+    void sendDataReal();
 
   protected:
     void initialize();

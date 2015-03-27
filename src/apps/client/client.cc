@@ -17,8 +17,10 @@
 //#define MAX 1
 
 #ifndef DEBUG
-#define DEBUG 0
+#define DEBUG 1
 #endif
+
+using namespace std;
 
 namespace wsn_energy {
 
@@ -247,6 +249,9 @@ void Client::processSelfMessage(cPacket* packet) {
                     APP_SEND_SOIL_DATA_LOW);
             break;
         }
+        case APP_SEND_DATA_REAL: {
+            sendDataReal();
+        }
         default:
             ev << "Unknown command" << endl;
             break;
@@ -318,6 +323,7 @@ void Client::sendData() {
 }
 
 void Client::sendData(char* message, int type) {
+
     char buf[100] = { 0 };
     char data[100] = { 0 };
     char myfilename[100] = { 0 };
@@ -335,52 +341,53 @@ void Client::sendData(char* message, int type) {
             data[0] = '\0';
             myfilename[0] = '\0';
 
-            sprintf(data, "%d", rand() % 200 + 4300);
+            sprintf(data, "1/%d", rand() % 200 + 4300);
             sprintf(myfilename, "client_data/id_%s_data_light.txt",
                     getParentModule()->getFullName());
 
-            len = sprintf(buf, "1 %s %s", getParentModule()->getFullName(),
-                    data);
             myfile.open(myfilename, std::ios::app);
             break;
         case APP_SEND_TEMPERATURE:
             buf[0] = '\0';
             data[0] = '\0';
             myfilename[0] = '\0';
-            sprintf(data, "%d", rand() % 200 + 1900);
-            len = sprintf(buf, "2 %s %s", getParentModule()->getFullName(),
-                    data);
+
+            sprintf(data, "2/%d", rand() % 200 + 1900);
             sprintf(myfilename, "client_data/id_%s_data_temperature.txt",
                     getParentModule()->getFullName());
+
             myfile.open(myfilename, std::ios::app);
             break;
         case APP_SEND_MOISTURE:
             buf[0] = '\0';
             data[0] = '\0';
             myfilename[0] = '\0';
-            sprintf(data, "%d", rand() % 200 + 3700);
-            len = sprintf(buf, "3 %s %s", getParentModule()->getFullName(),
-                    data);
+
+            sprintf(data, "3/%d", rand() % 200 + 3700);
             sprintf(myfilename, "client_data/id_%s_data_moisture.txt",
                     getParentModule()->getFullName());
+
             myfile.open(myfilename, std::ios::app);
             break;
         case APP_SEND_SOIL:
             buf[0] = '\0';
             data[0] = '\0';
             myfilename[0] = '\0';
-            sprintf(data, "%d, %d", rand() % 20 + 60, rand() % 200 + 5000);
-            len = sprintf(buf, "4 %s %s", getParentModule()->getFullName(),
-                    data);
+
+            sprintf(data, "4/%d, %d", rand() % 20 + 60, rand() % 200 + 5000);
             sprintf(myfilename, "client_data/id_%s_data_soil.txt",
                     getParentModule()->getFullName());
+
             myfile.open(myfilename, std::ios::app);
             break;
         }
 
+        len = sprintf(buf, "%s|%s", getParentModule()->getFullName(), data);
+
+        string data2 = data;
         myfile << simTime().inUnit(SIMTIME_MS);
         myfile << ", ";
-        myfile << data;
+        myfile << data2.substr(2, data2.size());
         myfile << "\n";
         myfile.close();
     } else {
@@ -388,10 +395,16 @@ void Client::sendData(char* message, int type) {
         len = sprintf(buf, message);
     }
 //    len = sprintf(buf, message);
-    sendMessage(buf, len, destinationPort, destinationAddress);
-    if (DEBUG) {
-        std::cout << "Sending data " << buf << endl;
-        this->bubble(message);
+    if (getModuleByPath("^.^")->par("usingMsgQueue")) {
+        this->dataQueue.push_back(data);
+        selfTimer(0.5f, APP_SEND_DATA_REAL);
+    } else {
+        sendMessage(buf, len, destinationPort, destinationAddress);
+
+        if (DEBUG) {
+            std::cout << "Sending data " << buf << endl;
+            this->bubble(message);
+        }
     }
 
     /* End to end statistics */
@@ -399,7 +412,32 @@ void Client::sendData(char* message, int type) {
             type));
     (check_and_cast<Statistic*>(simulation.getModuleByPath("statistic"))->registerStatistic(
     APP_SEND));
+}
 
+void Client::sendDataReal() {
+    if (this->dataQueue.size() == 0) {
+        return;
+    }
+
+    std::string message = getParentModule()->getFullName();
+    message += "|";
+    for (unsigned int i = 0; i < this->dataQueue.size(); i++) {
+        string data = this->dataQueue.at(i);
+        message += data + "|";
+    }
+    message = message.substr(0, message.size() - 1);
+
+    char buf[128] = { 0 };
+    int len = sprintf(buf, message.c_str());
+    int destinationPort = UDP_SERVER_PORT;
+    int destinationAddress = simulation.getModuleByPath("server.net")->getId();
+    sendMessage(buf, len, destinationPort, destinationAddress);
+
+    if (DEBUG) {
+        std::cout << "Sending data " << buf << endl;
+    }
+
+    this->dataQueue.clear();
 }
 
 void Client::sendData(char* message) {

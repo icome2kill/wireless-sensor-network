@@ -151,6 +151,7 @@ enum MANUAL_EVENT {
  *     APP_SEND_MOISTURE_DATA = 7;
  *     APP_SEND_SOIL_DATA_HIGH = 8;
  *     APP_SEND_SOIL_DATA_LOW = 9;
+ *     APP_SEND_DATA_REAL = 10; // Really send the data.
  * }
  * </pre>
  */
@@ -164,11 +165,12 @@ enum COMMAND_APP {
     APP_SEND_TEMPERATURE_DATA_LOW = 6,
     APP_SEND_MOISTURE_DATA = 7,
     APP_SEND_SOIL_DATA_HIGH = 8,
-    APP_SEND_SOIL_DATA_LOW = 9
+    APP_SEND_SOIL_DATA_LOW = 9,
+    APP_SEND_DATA_REAL = 10
 };
 
 /**
- * Enum generated from <tt>package/strobe/strobe.msg:52</tt> by nedtool.
+ * Enum generated from <tt>package/strobe/strobe.msg:53</tt> by nedtool.
  * <pre>
  * // Net related
  * enum COMMAND_NET
@@ -188,7 +190,7 @@ enum COMMAND_NET {
 };
 
 /**
- * Enum generated from <tt>package/strobe/strobe.msg:60</tt> by nedtool.
+ * Enum generated from <tt>package/strobe/strobe.msg:61</tt> by nedtool.
  * <pre>
  * // MAC related
  * enum COMMAND_MAC
@@ -214,7 +216,7 @@ enum COMMAND_MAC {
 };
 
 /**
- * Enum generated from <tt>package/strobe/strobe.msg:71</tt> by nedtool.
+ * Enum generated from <tt>package/strobe/strobe.msg:72</tt> by nedtool.
  * <pre>
  * enum RESULT_FROM_MAC
  * {
@@ -232,7 +234,7 @@ enum RESULT_FROM_MAC {
 };
 
 /**
- * Enum generated from <tt>package/strobe/strobe.msg:78</tt> by nedtool.
+ * Enum generated from <tt>package/strobe/strobe.msg:79</tt> by nedtool.
  * <pre>
  * // RDC related
  * enum COMMAND_RDC
@@ -275,7 +277,7 @@ enum COMMAND_RDC {
 };
 
 /**
- * Enum generated from <tt>package/strobe/strobe.msg:101</tt> by nedtool.
+ * Enum generated from <tt>package/strobe/strobe.msg:102</tt> by nedtool.
  * <pre>
  * enum RESULT_RDC
  * {
@@ -306,7 +308,7 @@ enum RESULT_RDC {
 };
 
 /**
- * Enum generated from <tt>package/strobe/strobe.msg:117</tt> by nedtool.
+ * Enum generated from <tt>package/strobe/strobe.msg:118</tt> by nedtool.
  * <pre>
  * // PHY related
  * enum COMMAND_PHY
@@ -335,7 +337,7 @@ enum COMMAND_PHY {
 };
 
 /**
- * Enum generated from <tt>package/strobe/strobe.msg:129</tt> by nedtool.
+ * Enum generated from <tt>package/strobe/strobe.msg:130</tt> by nedtool.
  * <pre>
  * enum RESULT_PHY
  * {

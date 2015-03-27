@@ -46,6 +46,7 @@ enum COMMAND_APP{
 	APP_SEND_MOISTURE_DATA = 7;
 	APP_SEND_SOIL_DATA_HIGH = 8;
 	APP_SEND_SOIL_DATA_LOW = 9;
+	APP_SEND_DATA_REAL = 10; // Really send the data.
 };
 
 // Net related
