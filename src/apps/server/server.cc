@@ -129,7 +129,7 @@ void Server::processLowerLayerMessage(cPacket* packet) {
                     dataType = APP_RECV_SOIL;
                     dataTypeDelay = APP_RECV_SOIL_DELAY;
                 }
-                myfile << simTime().inUnit(SIMTIME_MS) << " " << tokens2.at(1)
+                myfile << simTime().inUnit(SIMTIME_MS) << "," << tokens2.at(1)
                         << "\n";
                 myfile.close();
                 ((Statistic*) simulation.getModuleByPath("statistic"))->registerStatistic(

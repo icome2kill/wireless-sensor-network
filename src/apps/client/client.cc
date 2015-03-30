@@ -663,7 +663,7 @@ void Client::sendData(char* message, int type) {
             data[0] = '\0';
             myfilename[0] = '\0';
 
-            sprintf(data, "4/%d, %d", SOIL_PH[soilCount % 1500], SOIL_MOISTURE[soilCount++ % 1500]);
+            sprintf(data, "4/%d,%d", SOIL_PH[soilCount % 1500], SOIL_MOISTURE[soilCount++ % 1500]);
             sprintf(myfilename, "client_data/id_%s_data_soil.txt",
                     getParentModule()->getFullName());
 
@@ -675,7 +675,7 @@ void Client::sendData(char* message, int type) {
 
         string data2 = data;
         myfile << simTime().inUnit(SIMTIME_MS);
-        myfile << ", ";
+        myfile << ",";
         myfile << data2.substr(2, data2.size());
         myfile << "\n";
         myfile.close();
