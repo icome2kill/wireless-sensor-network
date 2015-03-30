@@ -30,6 +30,11 @@ class Client : public myModule
     int packetNumber;
     IpAddress* serverAddress;
     std::vector<std::string> dataQueue;
+
+    unsigned int soilCount;
+    unsigned int moistureCount;
+    unsigned int temperatureCount;
+    unsigned int lightCount;
 //    std::queue<string> msgQueue;
 
     void sendData();
