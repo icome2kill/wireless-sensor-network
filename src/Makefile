@@ -2,7 +2,7 @@
 # OMNeT++/OMNEST Makefile for wsn-energy
 #
 # This file was generated with the command:
-#  opp_makemake -f --deep
+#  opp_makemake -f --deep -ID:/Programming/School/GraduationResearch/omnetpp-4.6/samples/inet/src/util/headerserializers/udp/headers -LD:/Programming/School/GraduationResearch/omnetpp-4.6/samples/inet/out/$$\(CONFIGNAME\)/src -linet -DINET_IMPORT -KINET_PROJ=D:/Programming/School/GraduationResearch/omnetpp-4.6/samples/inet
 #
 
 # Name of target to be created (-o option)
@@ -15,6 +15,7 @@ USERIF_LIBS = $(ALL_ENV_LIBS) # that is, $(TKENV_LIBS) $(CMDENV_LIBS)
 
 # C++ include paths (with -I)
 INCLUDE_PATH = \
+    -I$(INET_PROJ)/src/util/headerserializers/udp/headers \
     -I. \
     -Iapps \
     -Iapps/client \
@@ -54,7 +55,8 @@ INCLUDE_PATH = \
 EXTRA_OBJS =
 
 # Additional libraries (-L, -l options)
-LIBS =
+LIBS = -L$(INET_PROJ)/out/$(CONFIGNAME)/src  -linet
+LIBS += -Wl,-rpath,`abspath $(INET_PROJ)/out/$(CONFIGNAME)/src`
 
 # Output directory
 PROJECT_OUTPUT_DIR = ../out
@@ -83,6 +85,7 @@ OBJS = \
     $O/core/rdc/contikiMac/contikiMAC.o \
     $O/core/rdc/nullrdc/nullRDC.o \
     $O/core/transport/udp/udp.o \
+    $O/util/huffman.o \
     $O/util/signal/mySignal.o \
     $O/util/statistic/statistic.o \
     $O/util/world/world.o \
@@ -101,6 +104,9 @@ MSGFILES = \
     package/segment/segment.msg \
     package/signal/signal.msg \
     package/strobe/strobe.msg
+
+# Other makefile variables (-K)
+INET_PROJ=D:/Programming/School/GraduationResearch/omnetpp-4.6/samples/inet
 
 #------------------------------------------------------------------------------
 
@@ -126,7 +132,7 @@ include $(CONFIGFILE)
 OMNETPP_LIB_SUBDIR = $(OMNETPP_LIB_DIR)/$(TOOLCHAIN_NAME)
 OMNETPP_LIBS = -L"$(OMNETPP_LIB_SUBDIR)" -L"$(OMNETPP_LIB_DIR)" -loppmain$D $(USERIF_LIBS) $(KERNEL_LIBS) $(SYS_LIBS)
 
-COPTS = $(CFLAGS)  $(INCLUDE_PATH) -I$(OMNETPP_INCL_DIR)
+COPTS = $(CFLAGS) -DINET_IMPORT $(INCLUDE_PATH) -I$(OMNETPP_INCL_DIR)
 MSGCOPTS = $(INCLUDE_PATH)
 
 # we want to recompile everything if COPTS changes,
@@ -432,6 +438,7 @@ $O/core/rdc/nullrdc/nullRDC.o: core/rdc/nullrdc/nullRDC.cc \
 	package/packet/packet_m.h \
 	package/strobe/strobe_m.h
 $O/core/transport/udp/udp.o: core/transport/udp/udp.cc \
+	$(INET_PROJ)/src/util/headerserializers/udp/headers/udp.h \
 	core/mac/macAddress.h \
 	core/myModule.h \
 	core/net/ipAddress.h \
@@ -460,6 +467,7 @@ $O/package/signal/signal_m.o: package/signal/signal_m.cc \
 	package/signal/signal_m.h
 $O/package/strobe/strobe_m.o: package/strobe/strobe_m.cc \
 	package/strobe/strobe_m.h
+$O/util/huffman.o: util/huffman.cc
 $O/util/signal/mySignal.o: util/signal/mySignal.cc \
 	util/signal/mySignal.h
 $O/util/statistic/statistic.o: util/statistic/statistic.cc \
