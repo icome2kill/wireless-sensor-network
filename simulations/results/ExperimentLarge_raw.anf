@@ -3,7 +3,6 @@
   <inputs>
     <inputs name="/wsn-energy/simulations/results/ExperimentLarge_raw2.vec"/>
     <inputs name="/wsn-energy/simulations/results/ExperimentLarge_raw2.sca"/>
-    <inputs name="/wsn-energy/simulations/results/ExperimentLarge_raw.sca"/>
   </inputs>
   <datasets/>
   <chartSheets/>
