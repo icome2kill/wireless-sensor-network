@@ -35,6 +35,8 @@ network WSN
         bool usingFLR;
         bool usingELB;
         bool usingHDC;
+        bool usingMsgQueue;
+        bool usingLZW;
 
         int width @unit(m);
         int height @unit(m);
@@ -53,7 +55,6 @@ network WSN
 
         int ssRange @unit(m);
         
-        bool usingMsgQueue;
         
         int lightSensingDelay;
         int temperatureSensingDelayHigh;

@@ -11,6 +11,11 @@
 #include "packet_m.h"
 #include <iostream>
 #include <fstream>
+#include "lzw.h"
+#include <iostream>
+#include <iterator>
+#include <vector>
+#include <sstream>
 
 #ifndef DEBUG
 #define DEBUG 0
@@ -78,6 +83,17 @@ void Server::processLowerLayerMessage(cPacket* packet) {
     myfile.close();
 
     char myfilename[100] = { 0 };
+
+    if (getModuleByPath("^.^")->par("usingLZW")) {
+        std::string result = data->getValue();
+        std::vector<unsigned char> charVector;
+        for (unsigned int i = 0; i < result.size(); i++) {
+            charVector.push_back(result.at(i));
+        }
+        std::string uncompressed = LZWHelper::decompress(charVector.begin(), charVector.end());
+        data->setValue(uncompressed.c_str());
+        std::cout << uncompressed << std::endl;
+    }
 
     if (DEBUG)
         this->getParentModule()->bubble(data->getValue());

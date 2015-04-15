@@ -12,6 +12,10 @@
 #include "statistic.h"
 #include "data_m.h"
 #include "lzw.h"
+#include <sstream>
+#include <iostream>
+#include <iterator>
+#include <vector>
 
 // define number of packet each sensor need to send
 //#define MAX 60
@@ -753,12 +757,15 @@ void Client::sendMessage(char *value, int len, int destinationPort,
 
     // data
     if (getModuleByPath("^.^")->par("usingLZW")) {
-        std::vector<char> compressed;
-        LZWHelper::compress(value, std::back_insert(compressed));
+        std::cout << "Original size: " << strlen(value) << std::endl;
+        std::vector<unsigned char> compressed;
+        LZWHelper::compress(value, std::back_inserter(compressed));
 
         std::stringstream result;
-        copy(compressed.begin(), compressed.end(), std::ostream_iterator<char>(result, ""));
-        data->setValue(result);
+        std::copy(compressed.begin(), compressed.end(),
+                std::ostream_iterator<unsigned char>(result, ""));
+        std::cout << "Compressed size: " << result.str().size() << std::endl;
+        data->setValue(result.str().c_str());
     } else {
         data->setValue(value);
     }

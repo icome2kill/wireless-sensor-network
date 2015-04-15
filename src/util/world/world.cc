@@ -170,6 +170,9 @@ void World::arrangeMotes() {
             y = intuniform(row * 13 + (position / 2) * 6 + 2,
                     row * 13 + (position / 2 + 1) * 6 - 2);
 
+            int temp = x;
+            x = y;
+            y = temp;
             break;
         }
         case 5: {

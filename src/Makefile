@@ -233,6 +233,7 @@ $O/apps/client/client.o: apps/client/client.cc \
 	package/frame/frame_m.h \
 	package/signal/signal_m.h \
 	package/strobe/strobe_m.h \
+	util/lzw.h \
 	util/statistic/statistic.h
 $O/apps/server/server.o: apps/server/server.cc \
 	apps/server/server.h \
@@ -242,6 +243,7 @@ $O/apps/server/server.o: apps/server/server.cc \
 	package/data/data_m.h \
 	package/packet/packet_m.h \
 	package/strobe/strobe_m.h \
+	util/lzw.h \
 	util/statistic/statistic.h
 $O/core/myModule.o: core/myModule.cc \
 	core/framer802154/framer.h \

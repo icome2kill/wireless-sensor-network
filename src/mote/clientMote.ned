@@ -40,7 +40,7 @@ module ClientMote
         int axisX @unit(m);
         int axisY @unit(m);
 
-        @display("p=$axisX,$axisY;i=misc/node2;is=vs");
+        @display("p=$axisX,$axisY;i=misc/node2;is=vs;t=Node");
 
     submodules:
         energest: Energest {
