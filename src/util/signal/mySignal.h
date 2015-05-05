@@ -21,6 +21,7 @@ class mySignal
   public:
     int radioSenderID;
     int radioRecverID;
+    int freqChannel = 26;
 
     mySignal();
     mySignal(int radioSenderID, int radioRecverID);

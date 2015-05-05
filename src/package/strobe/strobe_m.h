@@ -260,6 +260,7 @@ enum RESULT_FROM_MAC {
  *     // future message because of phase lock wait
  *     // begin a transmission turn (in one turn 6 maximum CCA + 1 trans)
  *     RDC_BEGIN_TRANS_TURN = 9;
+ *     RDC_SWITCH_FREQ_CHANNEL = 10;
  * }
  * </pre>
  */
@@ -273,11 +274,12 @@ enum COMMAND_RDC {
     RDC_CCA_RESULT = 6,
     RDC_CCA_TIME_OUT = 7,
     RDC_PHASE_TIME_OUT = 8,
-    RDC_BEGIN_TRANS_TURN = 9
+    RDC_BEGIN_TRANS_TURN = 9,
+    RDC_SWITCH_FREQ_CHANNEL = 10
 };
 
 /**
- * Enum generated from <tt>package/strobe/strobe.msg:102</tt> by nedtool.
+ * Enum generated from <tt>package/strobe/strobe.msg:103</tt> by nedtool.
  * <pre>
  * enum RESULT_RDC
  * {
@@ -308,7 +310,7 @@ enum RESULT_RDC {
 };
 
 /**
- * Enum generated from <tt>package/strobe/strobe.msg:118</tt> by nedtool.
+ * Enum generated from <tt>package/strobe/strobe.msg:119</tt> by nedtool.
  * <pre>
  * // PHY related
  * enum COMMAND_PHY
@@ -323,6 +325,8 @@ enum RESULT_RDC {
  * 
  *     PHY_SWITCH_IDLE = 7; // switch to sleep mode 	
  *     PHY_IDLING = 8; // begin idling
+ * 
+ *     PHY_SWITCH_FREQ_CHANNEL = 9; // Will be & with channel number
  * }
  * </pre>
  */
@@ -333,11 +337,12 @@ enum COMMAND_PHY {
     PHY_SWITCH_LISTEN = 5,
     PHY_LISTENING = 6,
     PHY_SWITCH_IDLE = 7,
-    PHY_IDLING = 8
+    PHY_IDLING = 8,
+    PHY_SWITCH_FREQ_CHANNEL = 9
 };
 
 /**
- * Enum generated from <tt>package/strobe/strobe.msg:130</tt> by nedtool.
+ * Enum generated from <tt>package/strobe/strobe.msg:133</tt> by nedtool.
  * <pre>
  * enum RESULT_PHY
  * {

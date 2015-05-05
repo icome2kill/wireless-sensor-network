@@ -83,7 +83,8 @@ void RadioDriver::processSelfMessage(cPacket* packet) {
     switch (packet->getKind()) {
     case COMMAND: /* Command */
     {
-        switch (check_and_cast<Command*>(packet)->getNote()) {
+        int note = check_and_cast<Command*>(packet)->getNote();
+        switch (note & 0x000000FF) {
         case PHY_SWITCH_TRANSMIT: /* switch to transmit */
         {
             if (!isBufferOK) {
@@ -197,6 +198,14 @@ void RadioDriver::processSelfMessage(cPacket* packet) {
             break;
         }/* idling */
 
+        case PHY_SWITCH_FREQ_CHANNEL: /* Switch to other channel */
+        {
+            this->freqChannel = (note & 0x0000FF00) >> 8;
+            if (DEBUG) {
+                std::cout << "[PHY] Freq: " << this->freqChannel << std::endl;
+            }
+            break;
+        }
         default:
             ev << "Unknown command" << endl;
             break;
@@ -231,7 +240,8 @@ void RadioDriver::processUpperLayerMessage(cPacket* packet) {
 
     case COMMAND: /* Command */
     {
-        switch (check_and_cast<Command*>(packet)->getNote()) {
+        int note = check_and_cast<Command*>(packet)->getNote();
+        switch (note & 0x000000FF) {
         case RDC_CCA_REQUEST: /* CCA request */
         {
             selfTimer(0, PHY_SWITCH_LISTEN);
@@ -259,6 +269,13 @@ void RadioDriver::processUpperLayerMessage(cPacket* packet) {
 
             break;
         }/* turn off listening */
+
+        case RDC_SWITCH_FREQ_CHANNEL: {
+            int commandCode = (note & 0x0000FF00)
+                    | PHY_SWITCH_FREQ_CHANNEL;
+            selfTimer(0, commandCode);
+            break;
+        }
 
         default:
             ev << "Unknown command" << endl;
@@ -391,7 +408,7 @@ void RadioDriver::switchOscilatorMode(int type) {
                     ENERGEST_TYPE_LISTEN, getRxPower());
         }
         (&getParentModule()->getDisplayString())->setTagArg("i", 1,
-                LISTEN_COLOR);
+        LISTEN_COLOR);
         break;
 
 //    case RECEIVING:
@@ -418,7 +435,7 @@ void RadioDriver::switchOscilatorMode(int type) {
                     ENERGEST_TYPE_TRANSMIT, getTxPower());
         }
         (&getParentModule()->getDisplayString())->setTagArg("i", 1,
-                TRANSMIT_COLOR);
+        TRANSMIT_COLOR);
         break;
 
     case POWER_DOWN: // Turn off

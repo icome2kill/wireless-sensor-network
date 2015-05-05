@@ -106,6 +106,8 @@ class RadioDriver : public myModule
     double trRange; // simulated transmission range according to txPower
     double coRange; // simulated collission range according to txPower
 
+    int freqChannel = 26; // Current operation channel.
+
     void switchOscilatorMode(int mode);    // Switch oscilator mode, public for being manipulated by energest, bytecount
 };
 

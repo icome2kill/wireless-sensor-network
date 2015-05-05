@@ -35,6 +35,7 @@ INCLUDE_PATH = \
     -Icore/radio/nullradio \
     -Icore/rdc \
     -Icore/rdc/contikiMac \
+    -Icore/rdc/muChContikiMac \
     -Icore/rdc/nullrdc \
     -Icore/transport \
     -Icore/transport/udp \
@@ -83,6 +84,7 @@ OBJS = \
     $O/core/radio/nullradio/nullRadio.o \
     $O/core/rdc/rdc.o \
     $O/core/rdc/contikiMac/contikiMAC.o \
+    $O/core/rdc/muChContikiMac/muChContikiMAC.o \
     $O/core/rdc/nullrdc/nullRDC.o \
     $O/core/transport/udp/udp.o \
     $O/util/huffman.o \
@@ -198,6 +200,7 @@ clean:
 	$(Q)-rm -f core/radio/nullradio/*_m.cc core/radio/nullradio/*_m.h
 	$(Q)-rm -f core/rdc/*_m.cc core/rdc/*_m.h
 	$(Q)-rm -f core/rdc/contikiMac/*_m.cc core/rdc/contikiMac/*_m.h
+	$(Q)-rm -f core/rdc/muChContikiMac/*_m.cc core/rdc/muChContikiMac/*_m.h
 	$(Q)-rm -f core/rdc/nullrdc/*_m.cc core/rdc/nullrdc/*_m.h
 	$(Q)-rm -f core/transport/*_m.cc core/transport/*_m.h
 	$(Q)-rm -f core/transport/udp/*_m.cc core/transport/udp/*_m.h
@@ -219,7 +222,7 @@ cleanall: clean
 
 depend:
 	$(qecho) Creating dependencies...
-	$(Q)$(MAKEDEPEND) $(INCLUDE_PATH) -f Makefile -P\$$O/ -- $(MSG_CC_FILES)  ./*.cc apps/*.cc apps/client/*.cc apps/server/*.cc core/*.cc core/bytecount/*.cc core/energest/*.cc core/framer802154/*.cc core/mac/*.cc core/mac/csma/*.cc core/mac/nullmac/*.cc core/net/*.cc core/net/ipv6/*.cc core/net/rpl/*.cc core/radio/*.cc core/radio/cc2420/*.cc core/radio/nullradio/*.cc core/rdc/*.cc core/rdc/contikiMac/*.cc core/rdc/nullrdc/*.cc core/transport/*.cc core/transport/udp/*.cc mote/*.cc package/*.cc package/data/*.cc package/frame/*.cc package/packet/*.cc package/segment/*.cc package/signal/*.cc package/strobe/*.cc util/*.cc util/signal/*.cc util/statistic/*.cc util/world/*.cc
+	$(Q)$(MAKEDEPEND) $(INCLUDE_PATH) -f Makefile -P\$$O/ -- $(MSG_CC_FILES)  ./*.cc apps/*.cc apps/client/*.cc apps/server/*.cc core/*.cc core/bytecount/*.cc core/energest/*.cc core/framer802154/*.cc core/mac/*.cc core/mac/csma/*.cc core/mac/nullmac/*.cc core/net/*.cc core/net/ipv6/*.cc core/net/rpl/*.cc core/radio/*.cc core/radio/cc2420/*.cc core/radio/nullradio/*.cc core/rdc/*.cc core/rdc/contikiMac/*.cc core/rdc/muChContikiMac/*.cc core/rdc/nullrdc/*.cc core/transport/*.cc core/transport/udp/*.cc mote/*.cc package/*.cc package/data/*.cc package/frame/*.cc package/packet/*.cc package/segment/*.cc package/signal/*.cc package/strobe/*.cc util/*.cc util/signal/*.cc util/statistic/*.cc util/world/*.cc
 
 # DO NOT DELETE THIS LINE -- make depend depends on it.
 $O/apps/client/client.o: apps/client/client.cc \
@@ -425,6 +428,19 @@ $O/core/rdc/contikiMac/contikiMAC.o: core/rdc/contikiMac/contikiMAC.cc \
 	core/net/ipAddress.h \
 	core/radio/radio.h \
 	core/rdc/contikiMac/contikiMAC.h \
+	core/rdc/rdc.h \
+	package/frame/frame_m.h \
+	package/packet/packet_m.h \
+	package/signal/signal_m.h \
+	package/strobe/strobe_m.h
+$O/core/rdc/muChContikiMac/muChContikiMAC.o: core/rdc/muChContikiMac/muChContikiMAC.cc \
+	core/framer802154/framer.h \
+	core/mac/mac.h \
+	core/mac/macAddress.h \
+	core/myModule.h \
+	core/net/ipAddress.h \
+	core/radio/radio.h \
+	core/rdc/muChContikiMac/muChContikiMAC.h \
 	core/rdc/rdc.h \
 	package/frame/frame_m.h \
 	package/packet/packet_m.h \

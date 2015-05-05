@@ -538,7 +538,7 @@ void Client::processSelfMessage(cPacket* packet) {
         case APP_SEND_SOIL_DATA_LOW: {
             sendData("4 SOIL data", APP_SEND_SOIL);
             selfTimer(
-                    getModuleByPath("^.^")->par("soilSensingDelayHigh").doubleValue(),
+                    getModuleByPath("^.^")->par("soilSensingDelayLow").doubleValue(),
                     APP_SEND_SOIL_DATA_LOW);
             break;
         }

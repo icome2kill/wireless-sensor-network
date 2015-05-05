@@ -519,9 +519,16 @@ void World::considerSignal(mySignal* signal) {
             != 0)
         // interfere others signal
         for (std::list<mySignal*>::iterator it = signals.begin();
-                it != signals.end(); it++)
+                it != signals.end(); it++) {
             if ((*it)->radioRecverID == recverID)
                 (*it)->corrupt();
+        }
+    if (signal->freqChannel
+            != (check_and_cast<RadioDriver*>(simulation.getModule(recverID)))->freqChannel) {
+        signal->corrupt();
+    }
+
+    // If the signal is not of the same frequency channel as receiver.
 }
 
 /*

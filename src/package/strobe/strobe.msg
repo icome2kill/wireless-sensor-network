@@ -97,6 +97,7 @@ enum COMMAND_RDC{
 	// future message because of phase lock wait
 	// begin a transmission turn (in one turn 6 maximum CCA + 1 trans)
 	RDC_BEGIN_TRANS_TURN  = 9; 
+	RDC_SWITCH_FREQ_CHANNEL = 10;
 };
 
 enum RESULT_RDC{
@@ -125,6 +126,8 @@ enum COMMAND_PHY{
 
 	PHY_SWITCH_IDLE     = 7; // switch to sleep mode 	
  	PHY_IDLING  	 	= 8; // begin idling
+ 	
+ 	PHY_SWITCH_FREQ_CHANNEL	= 9; // Will be & with channel number
 };
 
 enum RESULT_PHY{
