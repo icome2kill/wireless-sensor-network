@@ -98,6 +98,7 @@ void RDCdriver::processLowerLayerMessage(cPacket* packet) {
 void RDCdriver::sendFrame() {
     if (phase == TRANSMITTING_PHASE
             && phaseTimeOut->isScheduled() && bufferRDC != NULL) {
+        bufferRDC->setAckRequired(true);
         sendMessageToLower(bufferRDC->dup());
         sendCommand(RDC_TRANSMIT);
     }

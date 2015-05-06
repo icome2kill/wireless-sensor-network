@@ -545,6 +545,8 @@ void muChContikiMAC::receiveFrame(Frame* packet) {
                     // inform success
                     freqChannel = packet->getReserved();
                     sendCommand(RDC_SWITCH_FREQ_CHANNEL | freqChannel << 8);
+                    if (DEBUG)
+                        std::cout << "[ACK] freqChannel = " << freqChannel << std::endl;
                     if (phaseTimeOut->isScheduled())
                         quitRDCtransmissionPhase(RDC_SEND_OK);
                 }

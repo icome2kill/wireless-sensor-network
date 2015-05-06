@@ -375,6 +375,7 @@ void World::registerHost(RadioDriver* mote, Raw* onAir) {
             it != host->moteIDWithinTransmissionRange.end(); it++) {
         // create signal
         mySignal *signal = new mySignal(senderID, (*it));
+        signal->freqChannel = mote->freqChannel;
 
         // insert into signal manager list
         this->signals.push_front(signal);
@@ -525,6 +526,11 @@ void World::considerSignal(mySignal* signal) {
         }
     if (signal->freqChannel
             != (check_and_cast<RadioDriver*>(simulation.getModule(recverID)))->freqChannel) {
+        if (DEBUG)
+            std::cout << "Wrong channel" << signal->freqChannel << " vs "
+                    << (check_and_cast<RadioDriver*>(
+                            simulation.getModule(recverID)))->freqChannel
+                    << std::endl;
         signal->corrupt();
     }
 
