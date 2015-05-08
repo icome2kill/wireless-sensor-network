@@ -21,24 +21,20 @@
 
 namespace wsn_energy {
 
-class MACdriver: public myModule {
-protected:
+class MACdriver : public myModule
+{
+  protected:
     Frame* bufferMAC;
 
     void initialize();
     void finish();
 
-    /* main mechanism */
-    void processSelfMessage(cPacket*) = 0;
-    /* get command or original data from upper layer */
-    void processUpperLayerMessage(cPacket*) = 0;
-    /* process the results or package from lower layer */
-    void processLowerLayerMessage(cPacket*) = 0;
-    /* back-off transmitting, CCA is involved */
-    virtual void deferPacket() = 0;
+    void processSelfMessage(cPacket*);
+    void processUpperLayerMessage(cPacket*);
+    void processLowerLayerMessage(cPacket*);
 
-    /* encapsulate upper layer message */
-    void encap(cPacket *packet);
+    /* backoff transmitting, CCA is involved */
+    virtual void deferPacket() = 0;
 
     /* send buffer packet */
     void igniteRDCphase();
@@ -49,7 +45,7 @@ protected:
     /* accept input from lowerlayer */
     virtual void receiveFrame(Frame*);
 
-public:
+  public:
     // checking wrong/duplicated ACK in RDC
     int sequenceNumber;
 

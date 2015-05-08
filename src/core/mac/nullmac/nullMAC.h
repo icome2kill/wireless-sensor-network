@@ -13,12 +13,10 @@
 
 namespace wsn_energy {
 
-class nullMAC: public MACdriver {
-protected:
+class nullMAC : public MACdriver
+{
+  protected:
     virtual void deferPacket();
-    void processSelfMessage(cPacket*);
-    void processUpperLayerMessage(cPacket*);
-    void processLowerLayerMessage(cPacket*);
 };
 
 } /* namespace wsn_energy */

@@ -55,6 +55,7 @@ protected:
     virtual void receiveFrame(Frame*);
 public:
     int freqChannel = 26;
+    int count = 0;
 };
 
 } /* namespace wsn_energy */

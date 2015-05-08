@@ -509,6 +509,8 @@ void World::stopListening(RadioDriver* mote) {
 void World::considerSignal(mySignal* signal) {
 // Receiver ID
     int recverID = signal->radioRecverID;
+    RadioDriver* source = (check_and_cast<RadioDriver*>(
+    simulation.getModule(recverID)));
 
     // Incomplete message
     if ((check_and_cast<RadioDriver*>(simulation.getModule(recverID)))->status
@@ -521,16 +523,37 @@ void World::considerSignal(mySignal* signal) {
         // interfere others signal
         for (std::list<mySignal*>::iterator it = signals.begin();
                 it != signals.end(); it++) {
-            if ((*it)->radioRecverID == recverID)
+            if ((*it)->getIsCorrupted()) {
+                continue;
+            }
+            if ((*it)->radioRecverID == recverID && (*it)->freqChannel == signal->freqChannel) {
+                if (DEBUG) {
+                    std::cout << "Interfered on channel: " << (*it)->freqChannel
+                            << std::endl;
+                }
                 (*it)->corrupt();
+            }
         }
-    if (signal->freqChannel
-            != (check_and_cast<RadioDriver*>(simulation.getModule(recverID)))->freqChannel) {
+//    for (std::list<mySignal*>::iterator it = signals.begin();
+//            it != signals.end(); it++) {
+//        if ((*it)->getIsCorrupted()) {
+//            continue;
+//        }
+////        RadioDriver* source2 = (check_and_cast<RadioDriver*>(
+////        simulation.getModule((*it)->radioRecverID)));
+////        if (calculateDistance(source, source2)
+////                <= source->trRange + source2->trRange) {
+//            if ((*it)->freqChannel == signal->freqChannel && rand() % 4 <= 3) {
+//                (*it)->corrupt();
+//            }
+////        }
+//    }
+    if (signal->freqChannel != (check_and_cast<RadioDriver*>(
+    simulation.getModule(recverID)))->freqChannel) {
         if (DEBUG)
             std::cout << "Wrong channel" << signal->freqChannel << " vs "
                     << (check_and_cast<RadioDriver*>(
-                            simulation.getModule(recverID)))->freqChannel
-                    << std::endl;
+                    simulation.getModule(recverID)))->freqChannel << std::endl;
         signal->corrupt();
     }
 

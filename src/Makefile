@@ -1,12 +1,12 @@
 #
-# OMNeT++/OMNEST Makefile for wsn-energy
+# OMNeT++/OMNEST Makefile for wsn-energy-new
 #
 # This file was generated with the command:
-#  opp_makemake -f --deep -ID:/Programming/School/GraduationResearch/omnetpp-4.6/samples/inet/src/util/headerserializers/udp/headers -LD:/Programming/School/GraduationResearch/omnetpp-4.6/samples/inet/out/$$\(CONFIGNAME\)/src -linet -DINET_IMPORT -KINET_PROJ=D:/Programming/School/GraduationResearch/omnetpp-4.6/samples/inet
+#  opp_makemake -f --deep
 #
 
 # Name of target to be created (-o option)
-TARGET = wsn-energy$(EXE_SUFFIX)
+TARGET = wsn-energy-new$(EXE_SUFFIX)
 
 # User interface (uncomment one) (-u option)
 USERIF_LIBS = $(ALL_ENV_LIBS) # that is, $(TKENV_LIBS) $(CMDENV_LIBS)
@@ -15,7 +15,6 @@ USERIF_LIBS = $(ALL_ENV_LIBS) # that is, $(TKENV_LIBS) $(CMDENV_LIBS)
 
 # C++ include paths (with -I)
 INCLUDE_PATH = \
-    -I$(INET_PROJ)/src/util/headerserializers/udp/headers \
     -I. \
     -Iapps \
     -Iapps/client \
@@ -56,8 +55,7 @@ INCLUDE_PATH = \
 EXTRA_OBJS =
 
 # Additional libraries (-L, -l options)
-LIBS = -L$(INET_PROJ)/out/$(CONFIGNAME)/src  -linet
-LIBS += -Wl,-rpath,`abspath $(INET_PROJ)/out/$(CONFIGNAME)/src`
+LIBS =
 
 # Output directory
 PROJECT_OUTPUT_DIR = ../out
@@ -107,9 +105,6 @@ MSGFILES = \
     package/signal/signal.msg \
     package/strobe/strobe.msg
 
-# Other makefile variables (-K)
-INET_PROJ=D:/Programming/School/GraduationResearch/omnetpp-4.6/samples/inet
-
 #------------------------------------------------------------------------------
 
 # Pull in OMNeT++ configuration (Makefile.inc or configuser.vc)
@@ -134,7 +129,7 @@ include $(CONFIGFILE)
 OMNETPP_LIB_SUBDIR = $(OMNETPP_LIB_DIR)/$(TOOLCHAIN_NAME)
 OMNETPP_LIBS = -L"$(OMNETPP_LIB_SUBDIR)" -L"$(OMNETPP_LIB_DIR)" -loppmain$D $(USERIF_LIBS) $(KERNEL_LIBS) $(SYS_LIBS)
 
-COPTS = $(CFLAGS) -DINET_IMPORT $(INCLUDE_PATH) -I$(OMNETPP_INCL_DIR)
+COPTS = $(CFLAGS)  $(INCLUDE_PATH) -I$(OMNETPP_INCL_DIR)
 MSGCOPTS = $(INCLUDE_PATH)
 
 # we want to recompile everything if COPTS changes,
@@ -180,7 +175,7 @@ msgheaders: $(MSGFILES:.msg=_m.h)
 clean:
 	$(qecho) Cleaning...
 	$(Q)-rm -rf $O
-	$(Q)-rm -f wsn-energy wsn-energy.exe libwsn-energy.so libwsn-energy.a libwsn-energy.dll libwsn-energy.dylib
+	$(Q)-rm -f wsn-energy-new wsn-energy-new.exe libwsn-energy-new.so libwsn-energy-new.a libwsn-energy-new.dll libwsn-energy-new.dylib
 	$(Q)-rm -f ./*_m.cc ./*_m.h
 	$(Q)-rm -f apps/*_m.cc apps/*_m.h
 	$(Q)-rm -f apps/client/*_m.cc apps/client/*_m.h
@@ -456,7 +451,6 @@ $O/core/rdc/nullrdc/nullRDC.o: core/rdc/nullrdc/nullRDC.cc \
 	package/packet/packet_m.h \
 	package/strobe/strobe_m.h
 $O/core/transport/udp/udp.o: core/transport/udp/udp.cc \
-	$(INET_PROJ)/src/util/headerserializers/udp/headers/udp.h \
 	core/mac/macAddress.h \
 	core/myModule.h \
 	core/net/ipAddress.h \

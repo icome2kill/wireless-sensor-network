@@ -4,15 +4,12 @@
 #include "radio.h"
 
 #ifndef  DEBUG
-#define DEBUG 0
+#define DEBUG 1
 #endif
 
 namespace wsn_energy {
 
 Define_Module(muChContikiMAC);
-
-static int FREQ_CHANNEL_NUMBERS[] = { 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
-        21, 22, 23, 24, 25, 26 };
 
 void muChContikiMAC::initialize() {
     RDCdriver::initialize();
@@ -95,11 +92,13 @@ void muChContikiMAC::selfProcess(cPacket* packet) {
         case RDC_CCA_REQUEST: /* check cca */
         {
             // inform transceiver
-            freqChannel = rand() % 4 + 11;
-            if (DEBUG) {
-                std::cout << "[RDC] Freq: " << this->freqChannel << endl;
+            if (simTime() > 80) {
+                freqChannel = intuniform(11, 14);
+                if (DEBUG) {
+                    std::cout << "[RDC] Freq: " << this->freqChannel << endl;
+                }
+                sendCommand(RDC_SWITCH_FREQ_CHANNEL | (freqChannel << 8));
             }
-            sendCommand(RDC_SWITCH_FREQ_CHANNEL | (freqChannel << 8));
             sendCommand(RDC_CCA_REQUEST);
 
             if (DEBUG)
@@ -546,7 +545,8 @@ void muChContikiMAC::receiveFrame(Frame* packet) {
                     freqChannel = packet->getReserved();
                     sendCommand(RDC_SWITCH_FREQ_CHANNEL | freqChannel << 8);
                     if (DEBUG)
-                        std::cout << "[ACK] freqChannel = " << freqChannel << std::endl;
+                        std::cout << "[ACK] freqChannel = " << freqChannel
+                                << std::endl;
                     if (phaseTimeOut->isScheduled())
                         quitRDCtransmissionPhase(RDC_SEND_OK);
                 }
