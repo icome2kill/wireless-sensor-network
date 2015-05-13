@@ -4,7 +4,7 @@
 #include "radio.h"
 
 #ifndef  DEBUG
-#define DEBUG 1
+#define DEBUG 0
 #endif
 
 namespace wsn_energy {
@@ -91,9 +91,20 @@ void muChContikiMAC::selfProcess(cPacket* packet) {
         switch (check_and_cast<Command*>(packet)->getNote()) {
         case RDC_CCA_REQUEST: /* check cca */
         {
-            // inform transceiver
-            if (simTime() > 80) {
-                freqChannel = intuniform(11, 14);
+            if (simTime() > 0) {
+                if (preferredFreqChannel != 0) {
+                    if (DEBUG)
+                        std::cout << "[RDC] Try to use preferred channel"
+                                << std::endl;
+                    freqChannel = preferredFreqChannel;
+                    preferredFreqChannel = 0;
+                } else {
+                    int temp = freqChannel;
+                    freqChannel = intuniform(22, 26);
+                    if (freqChannel == temp) {
+                        freqChannel = intuniform(22, 26);
+                    }
+                }
                 if (DEBUG) {
                     std::cout << "[RDC] Freq: " << this->freqChannel << endl;
                 }
@@ -542,8 +553,7 @@ void muChContikiMAC::receiveFrame(Frame* packet) {
                 } else {
                     // stop transmission if still in transmission phase
                     // inform success
-                    freqChannel = packet->getReserved();
-                    sendCommand(RDC_SWITCH_FREQ_CHANNEL | freqChannel << 8);
+                    preferredFreqChannel = packet->getReserved();
                     if (DEBUG)
                         std::cout << "[ACK] freqChannel = " << freqChannel
                                 << std::endl;
@@ -597,7 +607,7 @@ void muChContikiMAC::receiveFrame(Frame* packet) {
                             FrameACK* ack = new FrameACK;
                             ack->setKind(DATA);
                             ack->setByteLength(ACK_LENGTH);
-                            ack->setReserved(freqChannel);
+                            ack->setReserved(this->freqChannel);
                             ack->setDataSequenceNumber(
                                     frame->getDataSequenceNumber());
 

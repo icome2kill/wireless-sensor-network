@@ -14,7 +14,7 @@
 #define MAC_CCA             2
 // check rate
 #define CHANNEL_CHECK_RATE       8        // Hertz
-#define CHANNEL_CHECK_INTERVAL   0.03125    // second
+#define CHANNEL_CHECK_INTERVAL   0.0625    // second
 // CCA configuration
 #define CCA_TRANS_MAX            6        // maximum number of CCA before transmitting
 #define CCA_COUNT_MAX            2        // maximum number of CCA per check
@@ -55,7 +55,7 @@ protected:
     virtual void receiveFrame(Frame*);
 public:
     int freqChannel = 26;
-    int count = 0;
+    int preferredFreqChannel = 0;
 };
 
 } /* namespace wsn_energy */

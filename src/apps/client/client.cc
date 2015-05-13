@@ -699,13 +699,13 @@ void Client::sendData(char* message, int type) {
             std::cout << "Sending data " << buf << endl;
             this->bubble(message);
         }
+        /* End to end statistics */
+        (check_and_cast<Statistic*>(simulation.getModuleByPath("statistic"))->registerStatistic(
+        APP_SEND));
     }
 
-    /* End to end statistics */
     (check_and_cast<Statistic*>(simulation.getModuleByPath("statistic"))->registerStatistic(
             type));
-    (check_and_cast<Statistic*>(simulation.getModuleByPath("statistic"))->registerStatistic(
-    APP_SEND));
 }
 
 void Client::sendDataReal() {
@@ -732,6 +732,10 @@ void Client::sendDataReal() {
     }
 
     this->dataQueue.clear();
+
+    /* End to end statistics */
+    (check_and_cast<Statistic*>(simulation.getModuleByPath("statistic"))->registerStatistic(
+    APP_SEND));
 }
 
 void Client::sendData(char* message) {
