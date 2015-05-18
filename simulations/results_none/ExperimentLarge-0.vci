@@ -1,15 +1,15 @@
-file 4397 1431942334                                            
+file 4394 1431935904                                            
 version 2
-run ExperimentLarge-0-20150518-16:27:40-8136
+run ExperimentLarge-0-20150518-14:41:44-6124
 attr configname ExperimentLarge
-attr datetime 20150518-16:27:40
+attr datetime 20150518-14:41:44
 attr experiment ExperimentLarge
 attr inifile omnetpp.ini
 attr iterationvars ""
 attr iterationvars2 $repetition=0
 attr measurement ""
 attr network WSN
-attr processid 8136
+attr processid 6124
 attr repetition 0
 attr replication #0
 attr resultdir results
@@ -20,5 +20,5 @@ vector 3  WSN.statistic  sensorEnergy:vector  ETV
 attr title  "Sensor energy, vector"
 vector 4  WSN.statistic  sensorEnergyLevel:vector  ETV
 attr title  "Sensor energy (level), vector"
-3	589 2368 93418297 93418297 1140 1140 72 6.503011769551 6.7066046708419 479.0490766526 3187.4042628344
-4	2957 1440 93418297 93418297 1140 1140 72 72 74 5287 388249
+3	589 2365 61417815 61417815 1140 1140 72 6.7242552091334 7.1199048385692 494.37366420602 3394.6706171673
+4	2954 1440 61417815 61417815 1140 1140 72 74 79 5461 414225

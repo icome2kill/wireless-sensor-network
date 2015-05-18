@@ -91,25 +91,35 @@ void muChContikiMAC::selfProcess(cPacket* packet) {
         switch (check_and_cast<Command*>(packet)->getNote()) {
         case RDC_CCA_REQUEST: /* check cca */
         {
-            if (simTime() > 0) {
-                if (preferredFreqChannel != 0) {
-                    if (DEBUG)
-                        std::cout << "[RDC] Try to use preferred channel"
-                                << std::endl;
-                    freqChannel = preferredFreqChannel;
-                    preferredFreqChannel = 0;
-                } else {
-                    int temp = freqChannel;
+            if (phase == CHECKING_PHASE) {
+                // Listening
+                freqChannel = nextChannel;
+                nextChannel = intuniform(22, 26);
+            } else {
+                // Sending
+                freqChannel = preferredFreqChannel;
+                preferredFreqChannel = 0;
+                if (freqChannel == 0) {
                     freqChannel = intuniform(22, 26);
-                    if (freqChannel == temp) {
-                        freqChannel = intuniform(22, 26);
-                    }
                 }
-                if (DEBUG) {
-                    std::cout << "[RDC] Freq: " << this->freqChannel << endl;
-                }
-                sendCommand(RDC_SWITCH_FREQ_CHANNEL | (freqChannel << 8));
             }
+//            if (preferredFreqChannel != 0) {
+//                if (DEBUG)
+//                    std::cout << "[RDC] Try to use preferred channel"
+//                            << std::endl;
+//                freqChannel = preferredFreqChannel;
+//                preferredFreqChannel = 0;
+//            } else {
+//                int temp = freqChannel;
+//                freqChannel = intuniform(26, 26);
+//                if (freqChannel == temp) {
+//                    freqChannel = intuniform(26, 26);
+//                }
+//            }
+            if (DEBUG) {
+                std::cout << "[RDC] Freq: " << this->freqChannel << endl;
+            }
+            sendCommand(RDC_SWITCH_FREQ_CHANNEL | (freqChannel << 8));
             sendCommand(RDC_CCA_REQUEST);
 
             if (DEBUG)
@@ -313,7 +323,7 @@ void muChContikiMAC::selfProcess(cPacket* packet) {
 
             case FREE_PHASE: /* begin a checking phase */
             {
-                if (!isHavingPendingTransmission) {
+                if (isHavingPendingTransmission) {
                     enterMACtransmissonPhase();
                 } else {
                     // acquire checking phase
@@ -607,7 +617,7 @@ void muChContikiMAC::receiveFrame(Frame* packet) {
                             FrameACK* ack = new FrameACK;
                             ack->setKind(DATA);
                             ack->setByteLength(ACK_LENGTH);
-                            ack->setReserved(this->freqChannel);
+                            ack->setReserved(nextChannel);
                             ack->setDataSequenceNumber(
                                     frame->getDataSequenceNumber());
 

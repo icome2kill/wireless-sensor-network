@@ -55,6 +55,7 @@ protected:
     virtual void receiveFrame(Frame*);
 public:
     int freqChannel = 26;
+    int nextChannel = 26;
     int preferredFreqChannel = 0;
 };
 
