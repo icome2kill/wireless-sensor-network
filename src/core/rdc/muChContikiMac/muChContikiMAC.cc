@@ -94,13 +94,13 @@ void muChContikiMAC::selfProcess(cPacket* packet) {
             if (phase == CHECKING_PHASE) {
                 // Listening
                 freqChannel = nextChannel;
-                nextChannel = intuniform(23, 26);
+                nextChannel = intuniform(11, 14);
             } else {
                 // Sending
                 freqChannel = preferredFreqChannel;
                 preferredFreqChannel = 0;
                 if (freqChannel == 0) {
-                    freqChannel = intuniform(23, 26);
+                    freqChannel = intuniform(11, 14);
                 }
             }
 //            if (preferredFreqChannel != 0) {
