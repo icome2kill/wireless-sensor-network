@@ -94,13 +94,13 @@ void muChContikiMAC::selfProcess(cPacket* packet) {
             if (phase == CHECKING_PHASE) {
                 // Listening
                 freqChannel = nextChannel;
-                nextChannel = intuniform(22, 26);
+                nextChannel = intuniform(23, 26);
             } else {
                 // Sending
                 freqChannel = preferredFreqChannel;
                 preferredFreqChannel = 0;
                 if (freqChannel == 0) {
-                    freqChannel = intuniform(22, 26);
+                    freqChannel = intuniform(23, 26);
                 }
             }
 //            if (preferredFreqChannel != 0) {
@@ -110,11 +110,11 @@ void muChContikiMAC::selfProcess(cPacket* packet) {
 //                freqChannel = preferredFreqChannel;
 //                preferredFreqChannel = 0;
 //            } else {
-//                int temp = freqChannel;
-//                freqChannel = intuniform(26, 26);
-//                if (freqChannel == temp) {
-//                    freqChannel = intuniform(26, 26);
-//                }
+//            int temp = freqChannel;
+//            freqChannel = intuniform(23, 26);
+//            if (freqChannel == temp) {
+//                freqChannel = intuniform(23, 26);
+//            }
 //            }
             if (DEBUG) {
                 std::cout << "[RDC] Freq: " << this->freqChannel << endl;
@@ -323,7 +323,7 @@ void muChContikiMAC::selfProcess(cPacket* packet) {
 
             case FREE_PHASE: /* begin a checking phase */
             {
-                if (isHavingPendingTransmission) {
+                if (!isHavingPendingTransmission) {
                     enterMACtransmissonPhase();
                 } else {
                     // acquire checking phase
