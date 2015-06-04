@@ -34,6 +34,7 @@ class muChContikiMAC: public RDCdriver {
 protected:
     void initialize();
     void processLowerLayerMessage(cPacket*);
+    void sendFrame();
 
     /* MAC call-back */
     void enterMACtransmissonPhase();

@@ -396,6 +396,16 @@ void contikiMAC::selfProcess(cPacket* packet) {
         break;
     }
 }
+void contikiMAC::sendFrame() {
+    if (phase == TRANSMITTING_PHASE
+            && phaseTimeOut->isScheduled() && bufferRDC != NULL) {
+        if (getModuleByPath("^.^")->par("usingFLR")) {
+            bufferRDC->setAckRequired(true);
+        }
+        sendMessageToLower(bufferRDC->dup());
+        sendCommand(RDC_TRANSMIT);
+    }
+}
 
 void contikiMAC::enterMACtransmissonPhase() {
     if (isHavingPendingTransmission) {

@@ -4,7 +4,7 @@
 #include "radio.h"
 
 #ifndef  DEBUG
-#define DEBUG 0
+#define DEBUG 1
 #endif
 
 namespace wsn_energy {
@@ -91,16 +91,19 @@ void muChContikiMAC::selfProcess(cPacket* packet) {
         switch (check_and_cast<Command*>(packet)->getNote()) {
         case RDC_CCA_REQUEST: /* check cca */
         {
+            int numChannels = getModuleByPath("^.^")->par("numChannels");
+            if (numChannels < 1)
+                numChannels = 1;
             if (phase == CHECKING_PHASE) {
                 // Listening
                 freqChannel = nextChannel;
-                nextChannel = intuniform(11, 14);
+                nextChannel = intuniform(26 - (numChannels - 1), 26);
             } else {
                 // Sending
                 freqChannel = preferredFreqChannel;
                 preferredFreqChannel = 0;
                 if (freqChannel == 0) {
-                    freqChannel = intuniform(11, 14);
+                    freqChannel = intuniform(26 - (numChannels - 1), 26);
                 }
             }
 //            if (preferredFreqChannel != 0) {
@@ -323,7 +326,7 @@ void muChContikiMAC::selfProcess(cPacket* packet) {
 
             case FREE_PHASE: /* begin a checking phase */
             {
-                if (!isHavingPendingTransmission) {
+                if (isHavingPendingTransmission) {
                     enterMACtransmissonPhase();
                 } else {
                     // acquire checking phase
@@ -532,6 +535,14 @@ void muChContikiMAC::beginTransmitting(int command) {
     default:
         ev << "Unknown command" << endl;
         break;
+    }
+}
+void muChContikiMAC::sendFrame() {
+    if (phase == TRANSMITTING_PHASE
+            && phaseTimeOut->isScheduled() && bufferRDC != NULL) {
+        bufferRDC->setAckRequired(true);
+        sendMessageToLower(bufferRDC->dup());
+        sendCommand(RDC_TRANSMIT);
     }
 }
 

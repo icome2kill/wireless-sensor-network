@@ -44,6 +44,8 @@ protected:
     void enterMACtransmissonPhase();
     void quitMACtransmissonPhase();
 
+    void sendFrame();
+
     /* RDC transmission turn */
     void enterRDCtransmissionPhase();
     void quitRDCtransmissionPhase(int result);

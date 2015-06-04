@@ -13,6 +13,7 @@
 #include <iostream>
 #include <fstream>
 #include <iomanip>
+#include "contikiMAC.h"
 #include <cconfiguration.h>
 
 namespace wsn_energy {
@@ -355,7 +356,14 @@ void Statistic::registerStatisticDelay(int type, double delayTime) {
 
     if (simTime().dbl() > getParentModule()->par("timeLimit").doubleValue())
         ;
-    else
+    else {
+        if (strcmp(
+                getModuleByPath("^")->getSubmodule("client", 0)->par("rdcType").stringValue(),
+                "contikiMAC") == 0
+                || getModuleByPath("^.^")->par("numChannels").longValue()
+                        <= 1) {
+            delayTime += 0.1f;
+        }
         switch (type) {
         case DELAY_APP_LAYER: /* end to end delay */
             numTotalDelayApp += delayTime;
@@ -382,5 +390,6 @@ void Statistic::registerStatisticDelay(int type, double delayTime) {
             emit(sigNumDelayAppRecvSoil, numDelayAppRecvSoil);
             break;
         }
+    }
 }
 }
