@@ -360,7 +360,7 @@ void Statistic::registerStatisticDelay(int type, double delayTime) {
         if (strcmp(
                 getModuleByPath("^")->getSubmodule("client", 0)->par("rdcType").stringValue(),
                 "contikiMAC") == 0
-                || getModuleByPath("^.^")->par("numChannels").longValue()
+                || getParentModule()->par("numChannels").doubleValue()
                         <= 1) {
             delayTime += 0.1f;
         }
