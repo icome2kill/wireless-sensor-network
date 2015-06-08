@@ -37,6 +37,7 @@ network WSN
         bool usingHDC;
         bool usingMsgQueue;
         bool usingLZW;
+        int numChannels;
 
         int width @unit(m);
         int height @unit(m);
